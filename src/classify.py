@@ -51,7 +51,7 @@ def load_data_with_ai(base_path):
         class_dir = os.path.join(base_path, class_name)
         if not os.path.isdir(class_dir): continue
         
-        file_list = os.listdir(class_dir) # Limit for speed
+        file_list = os.listdir(class_dir)[:200] # Limit for speed
         print(f"   Extracting features for: {class_name}")
         
         for img_name in file_list:

@@ -2,3 +2,4 @@ ignore/
 dataset/*
 !dataset/
 !dataset/.gitkeep
+venv/

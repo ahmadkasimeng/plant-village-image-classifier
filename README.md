@@ -1,10 +1,10 @@
 # Plant Disease Classification using Hybrid AI
 
-This project implements a hybrid machine learning approach to classify plant diseases from leaf images. It combines Deep Learning (ResNet18) for feature extraction with a classical Machine Learning model (Random Forest) for efficient classification.
+This project implements a hybrid machine learning approach to classify plant diseases from leaf images. It combines Deep Learning (ResNet18 or ResNet50) for feature extraction with a classical Machine Learning model (Random Forest) for efficient classification.
 
 ## 🚀 How It Works
 
-1.  **Feature Extraction:** We use a pre-trained **ResNet18** neural network. We remove the final classification layer, turning the network into a powerful "feature extractor" that converts image data into numerical vectors.
+1.  **Feature Extraction:** We use a pre-trained **ResNet18** neural network. There is also a script for **ResNet50**. We remove the final classification layer, turning the network into a powerful "feature extractor" that converts image data into numerical vectors.
 2.  **Classification:** These vectors are fed into a **Random Forest Classifier** to determine the specific disease.
 
 ## 📂 Dataset Setup (Important)

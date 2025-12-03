@@ -1,0 +1,7 @@
+Timestamp            | Device                    | Task                           | Duration (s)   
+-----------------------------------------------------------------------------------------------
+2025-12-03 16:35:01  | NVIDIA GeForce RTX 4060 Laptop GPU | Feature Extraction (ResNet18)  | 13.7569        
+2025-12-03 16:35:01  | NVIDIA GeForce RTX 4060 Laptop GPU | Data Splitting                 | 0.0030         
+2025-12-03 16:35:01  | NVIDIA GeForce RTX 4060 Laptop GPU | Classifier Training (RF)       | 1.7031         
+2025-12-03 16:35:01  | NVIDIA GeForce RTX 4060 Laptop GPU | Evaluation                     | 0.1156         
+-----------------------------------------------------------------------------------------------

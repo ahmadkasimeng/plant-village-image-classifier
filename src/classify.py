@@ -1,4 +1,6 @@
 import os
+import time
+from datetime import datetime
 import cv2
 import numpy as np
 import torch
@@ -82,27 +84,66 @@ def load_data_with_ai(base_path):
 
 # --- MAIN EXECUTION ---
 if __name__ == "__main__":
+    # Setup Logging
+    log_file_path = script_dir / "performance_log.txt"
+    timings = {}
+    
+    # Get Device Name for Log
+    device_name = "CPU"
+    if device.type == 'cuda':
+        device_name = torch.cuda.get_device_name(0)
+
+    print(f"\n⏱️  Starting Performance Tracking on {device_name}...")
+
     # 1. Extract Features (NOW ON GPU)
+    start_time = time.time()
     X, y = load_data_with_ai(dataset_path)
-    print(f"\n✅ Data Processed. Shape: {X.shape}")
+    timings["Feature Extraction (ResNet18)"] = time.time() - start_time
+    print(f"✅ Data Processed. Shape: {X.shape}")
+    print(f"⏱️  Feature Extraction took: {timings['Feature Extraction (ResNet18)']:.2f}s")
 
     # 2. Split Data
+    start_time = time.time()
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    timings["Data Splitting"] = time.time() - start_time
 
     # 3. Train Optimized Random Forest (STILL CPU - Scikit-learn limit)
     print("🌲 Training Optimized Random Forest (500 Trees)...")
+    start_time = time.time()
     rf_model = RandomForestClassifier(n_estimators=500, class_weight='balanced', random_state=42, n_jobs=-1) 
     # Added n_jobs=-1 to use all CPU cores
     rf_model.fit(X_train, y_train)
+    timings["Classifier Training (RF)"] = time.time() - start_time
+    print(f"⏱️  Training took: {timings['Classifier Training (RF)']:.2f}s")
 
     # 4. Evaluation
     print("📊 Evaluating...")
+    start_time = time.time()
     y_pred = rf_model.predict(X_test)
-    
     acc = accuracy_score(y_test, y_pred)
+    timings["Evaluation"] = time.time() - start_time
+    
     print(f"✨ Accuracy: {acc * 100:.2f}%")
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
+
+    # --- LOGGING TO FILE ---
+    try:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_exists = log_file_path.exists()
+        
+        with open(log_file_path, "a", encoding="utf-8") as f:
+            if not log_exists:
+                # Write Header
+                f.write(f"{'Timestamp':<20} | {'Device':<25} | {'Task':<30} | {'Duration (s)':<15}\n")
+                f.write("-" * 95 + "\n")
+            
+            for task, duration in timings.items():
+                f.write(f"{timestamp:<20} | {device_name:<25} | {task:<30} | {duration:<15.4f}\n")
+            f.write("-" * 95 + "\n")
+        print(f"\n📝 Performance log updated: {log_file_path}")
+    except Exception as e:
+        print(f"⚠️ Failed to write log: {e}")
 
     # 5. Visualization
     print("🎨 Plotting Confusion Matrix...")

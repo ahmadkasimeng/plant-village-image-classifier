@@ -214,6 +214,7 @@ if __name__ == "__main__":
             f.write("=" * 80 + "\n")
             f.write(f"Timestamp: {timestamp}\n")
             f.write(f"Configuration: {mode_name}\n")
+            f.write(f"Dataset Limit: {'ALL' if data_limit is None else data_limit}\n")
             f.write(f"Device: {device_name}\n")
             f.write(f"Overall Accuracy: {acc * 100:.2f}%\n")
             f.write("-" * 80 + "\n")

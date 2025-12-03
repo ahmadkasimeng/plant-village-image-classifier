@@ -1,11 +1,14 @@
-# Plant Disease Classification using Hybrid AI
+# 🌿 Plant Disease Classification using Hybrid AI
 
-This project implements a hybrid machine learning approach to classify plant diseases from leaf images. It combines Deep Learning (ResNet18 or ResNet50) for feature extraction with a classical Machine Learning model (Random Forest) for efficient classification.
+This project implements a hybrid machine learning approach to classify plant diseases from leaf images. It combines Deep Learning (ResNet18 or ResNet50) for feature extraction with a classical Machine Learning model (Random Forest or Gradient Boosting) for efficient classification.
 
-## 🚀 How It Works
+## 🚀 Features
 
-1.  **Feature Extraction:** We use a pre-trained **ResNet18** neural network. There is also a script for **ResNet50**. We remove the final classification layer, turning the network into a powerful "feature extractor" that converts image data into numerical vectors.
-2.  **Classification:** These vectors are fed into a **Random Forest Classifier** to determine the specific disease.
+*   **Hybrid Architecture:** Uses CNNs (ResNet) for features and ML classifiers (RF/GB) for decision making.
+*   **GPU Acceleration:** Automatically detects and uses CUDA (NVIDIA GPU) for feature extraction if available.
+*   **Flexible Modes:** Switch between "Basic" (Fast) and "Enhanced" (Accurate) modes easily.
+*   **Custom Configuration:** Mix and match models (ResNet18/50) and classifiers (RF/GB).
+*   **Performance Logging:** Automatically logs experiments, timing, and accuracy to `src/experiment_log.txt`.
 
 ## 📂 Dataset Setup (Important)
 
@@ -21,7 +24,9 @@ This project requires the **PlantVillage** dataset. Because the dataset is large
 ```text
 Project_Root/
 ├── src/
-│   └── classify.py
+│   ├── classify.py
+│   ├── notebook.ipynb
+│   └── experiment_log.txt
 ├── dataset/
 │   ├── Pepper__bell___Bacterial_spot/
 │   ├── Potato___healthy/
@@ -32,10 +37,9 @@ Project_Root/
 
 ## 📦 Installation & Requirements
 
-It is highly recommended to use a Virtual Environment to avoid conflicts with your global Python installation. Python313 was used.
+It is highly recommended to use a Virtual Environment.
 
 1.  **Create a Virtual Environment (Optional but Recommended):**
-
     ```bash
     python -m venv venv
     # Windows:
@@ -43,124 +47,70 @@ It is highly recommended to use a Virtual Environment to avoid conflicts with yo
     # Mac/Linux:
     source venv/bin/activate
     ```
-    
 
 2.  **Install Dependencies:**
-    This project uses a `requirements.txt` file generated for this specific script.
-
     ```bash
     pip install -r requirements.txt
     ```
 
-    > **💡 PyTorch Note:** The requirements file includes `torch` and `torchvision`. If you do not have a dedicated GPU, or if you want to save space and install the lighter **CPU-only** version, run this command *after* installing requirements:
-
+    > **💡 GPU Support:** If you have an NVIDIA GPU, ensure you install the CUDA-enabled version of PyTorch.
     > ```bash
-    > pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+    > pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
     > ```
-
-## ⚙️ Customizing the Script
-
-You can tweak parameters in `src/classify.py` to balance speed vs. accuracy:
-
-  * **Sample Size:**
-      * Currently, the script limits processing to **200 images per class** for speed (`[:200]`).
-      * To use the full dataset, remove the slice `[:200]` in the `load_data_with_ai` function.
-  * **Model Complexity:**
-      * You can adjust `n_estimators` (number of trees) in the `RandomForestClassifier`. Higher numbers (e.g., 500 or 1000) are more stable but slower.
-  * **Feature Extractor:**
-      * The script uses `resnet18`. You can swap this for `resnet50` if you need deeper feature analysis, though it will be slower on CPU.
 
 ## 🏃 Usage
 
-Run the classification script from the root or src folder:
+You can run the script with various configurations.
 
+### 1. Basic Mode (Default)
+Uses **ResNet18** + **Random Forest**. Limits data to **200 images/class** for speed.
 ```bash
 python src/classify.py
+# OR
+python src/classify.py basic
 ```
 
-### 📓 Interactive Notebook
-
-If you prefer an interactive environment to visualize the steps or tweak the model without reloading the dataset every time, a Jupyter Notebook is provided.
-
-1.  Ensure you have Jupyter installed (`pip install notebook`).
-2.  Navigate to the `src` folder.
-3.  Open the notebook:
-    ```bash
-    jupyter notebook notebook.ipynb
-    ```
-
-The script will:
-
-1.  Load and process images.
-2.  Train the Random Forest model.
-3.  Output accuracy metrics and a classification report.
+### 2. Enhanced Mode
+Uses **ResNet50** + **Gradient Boosting**. Uses **ALL** images for maximum accuracy.
 ```bash
- 🧠 Loading ResNet18 (Pre-trained AI)...
-⏳ Processing images with AI features...
-   Extracting features for: Pepper__bell___Bacterial_spot
-   Extracting features for: Pepper__bell___healthy
-   Extracting features for: Potato___Early_blight
-   Extracting features for: Potato___healthy
-   Extracting features for: Potato___Late_blight
-   Extracting features for: Tomato_Bacterial_spot
-   Extracting features for: Tomato_Early_blight
-   Extracting features for: Tomato_healthy
-   Extracting features for: Tomato_Late_blight
-   Extracting features for: Tomato_Leaf_Mold
-   Extracting features for: Tomato_Septoria_leaf_spot
-   Extracting features for: Tomato_Spider_mites_Two_spotted_spider_mite
-   Extracting features for: Tomato__Target_Spot
-   Extracting features for: Tomato__Tomato_mosaic_virus
-   Extracting features for: Tomato__Tomato_YellowLeaf__Curl_Virus
+python src/classify.py enhanced
+```
 
-✅ Data Processed. Shape: (2952, 512)
-🌲 Training Optimized Random Forest (500 Trees)...
-📊 Evaluating...
-✨ Accuracy: 82.23%
+### 3. Custom Configuration
+You can mix and match models and classifiers.
+Format: `python src/classify.py [MODEL] [CLASSIFIER] [LIMIT]`
 
-Classification Report:
-                                             precision    recall  f1-score   support
+*   **Models:** `18` (ResNet18), `50` (ResNet50)
+*   **Classifiers:** `RF` (Random Forest), `GB` (Gradient Boosting)
+*   **Limit:** Number of images per class (`0` for ALL).
 
-              Pepper__bell___Bacterial_spot       0.91      0.89      0.90        45
-                     Pepper__bell___healthy       0.85      0.97      0.91        40
-                      Potato___Early_blight       0.90      0.96      0.93        54
-                       Potato___Late_blight       0.87      0.79      0.83        43
-                           Potato___healthy       0.86      0.90      0.88        20
-                      Tomato_Bacterial_spot       0.68      0.86      0.76        37
-                        Tomato_Early_blight       0.55      0.44      0.49        41
-                         Tomato_Late_blight       0.90      0.51      0.65        35
-                           Tomato_Leaf_Mold       0.80      0.92      0.85        38
-                  Tomato_Septoria_leaf_spot       0.61      0.70      0.65        33
-Tomato_Spider_mites_Two_spotted_spider_mite       0.83      0.94      0.88        36
-                        Tomato__Target_Spot       0.84      0.71      0.77        51
-      Tomato__Tomato_YellowLeaf__Curl_Virus       0.91      0.91      0.91        32
-                Tomato__Tomato_mosaic_virus       0.92      0.87      0.89        39
-                             Tomato_healthy       0.92      0.94      0.93        47
+**Examples:**
+```bash
+# ResNet18 + Gradient Boosting + All Data
+python src/classify.py 18 GB 0
 
-                                   accuracy                           0.82       591
-                                  macro avg       0.82      0.82      0.81       591
-                               weighted avg       0.83      0.82      0.82       591
+# ResNet50 + Random Forest + 500 images per class
+python src/classify.py 50 RF 500
+```
 
-🎨 Plotting Confusion Matrix...
- ```
-4.  Display a Confusion Matrix heatmap.
+## 📊 Experiment Logs
+Every time you run the script, the results are saved to `src/experiment_log.txt`. This file contains:
+*   Timestamp & Configuration used.
+*   Execution time for each step.
+*   Overall Accuracy.
+*   Detailed Classification Report (Precision, Recall, F1-Score).
 
+### 📓 Interactive Notebook
+If you prefer an interactive environment, use the provided Jupyter Notebook. It has been updated to support the new configurations.
 
-![Resulting Confusion Matrix](Confusion%20Matrix.png "Optional title")
-
-
-
----
-
-# Confusion Matrix for all dataset (Not constrained to 200)
-
-![Resulting Confusion Matrix](Confusion%20Matrix%20All%20Dataset.png "Optional title")
-
----
+```bash
+jupyter notebook src/notebook.ipynb
+```
+In the notebook, you can set `MODEL_TYPE`, `CLASSIFIER_TYPE`, and `DATA_LIMIT` variables at the top to customize your run.
 
 ## 📉 Understanding the Confusion Matrix
 
-To evaluate how well the model performs, we use a **Confusion Matrix**. This chart visualizes exactly where the model is "confused" between different diseases. Using the unconstrained version as a guide.
+To evaluate how well the model performs, we use a **Confusion Matrix**. This chart visualizes exactly where the model is "confused" between different diseases.
 
 ### How to Read It
 * **Y-Axis (Left):** The **True Label** (What the plant actually has).
@@ -168,15 +118,8 @@ To evaluate how well the model performs, we use a **Confusion Matrix**. This cha
 
 ### 1. The "Perfect" Diagonal
 Ideally, we want to see high numbers (dark blue squares) running in a diagonal line from the top-left to the bottom-right.
-* **Example:** Look at **`Tomato_Tomato_YellowLeaf__Curl_Virus`** (second from bottom). The model correctly predicted this **624 times**. The rest of that row is mostly zeros, meaning the model is very confident and accurate for this disease.
 
 ### 2. Where the Model Get Confused
 Numbers **outside** that main diagonal represent errors. By looking at these, we can see *how* the model messed up.
+* **Example:** *Early Blight*, *Late Blight*, and *Bacterial Spot* often look very similar (brown spots), making it harder for the AI to distinguish them compared to distinct viral infections.
 
-**Real Example from our Results:**
-Look at the row for **`Tomato_Early_blight`**. This is a tricky class for the AI:
-* It correctly identified it **60** times.
-* It incorrectly guessed **`Tomato_Bacterial_spot`** **38** times.
-* It incorrectly guessed **`Tomato_Late_blight`** **40** times.
-
-**Why?** Visually, *Early Blight*, *Late Blight*, and *Bacterial Spot* all look very similar (brown spots on leaves), making it harder for the AI to distinguish them compared to distinct viral infections.

@@ -17,10 +17,20 @@ script_dir = Path(__file__).resolve().parent
 dataset_path = script_dir.parent / 'dataset'
 
 # --- STEP 1: SETUP THE AI FEATURE EXTRACTOR ---
+# Check for GPU availability
+print("🔍 Checking for GPU availability...")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"🚀 Using Device: {device}") 
+if device.type == 'cuda':
+    print(f"   GPU Name: {torch.cuda.get_device_name(0)}")
+
 print("🧠 Loading ResNet18 (Pre-trained AI)...")
 weights = models.ResNet18_Weights.DEFAULT
 resnet = models.resnet18(weights=weights)
 resnet = torch.nn.Sequential(*(list(resnet.children())[:-1])) # Remove last layer
+
+# MOVE MODEL TO GPU
+resnet = resnet.to(device) 
 resnet.eval()
 
 preprocess = transforms.Compose([
@@ -33,10 +43,15 @@ preprocess = transforms.Compose([
 def get_vector(img_path):
     input_image = Image.open(img_path).convert('RGB')
     input_tensor = preprocess(input_image)
-    input_batch = input_tensor.unsqueeze(0)
+    
+    # MOVE INPUT TO GPU
+    input_batch = input_tensor.unsqueeze(0).to(device) 
+    
     with torch.no_grad():
         output = resnet(input_batch)
-    return output.squeeze().numpy()
+    
+    # MOVE OUTPUT BACK TO CPU FOR NUMPY
+    return output.cpu().squeeze().numpy()
 
 def load_data_with_ai(base_path):
     features_list = []
@@ -51,7 +66,7 @@ def load_data_with_ai(base_path):
         class_dir = os.path.join(base_path, class_name)
         if not os.path.isdir(class_dir): continue
         
-        file_list = os.listdir(class_dir)[:200] # Limit for speed
+        file_list = os.listdir(class_dir)[:200] 
         print(f"   Extracting features for: {class_name}")
         
         for img_name in file_list:
@@ -67,17 +82,17 @@ def load_data_with_ai(base_path):
 
 # --- MAIN EXECUTION ---
 if __name__ == "__main__":
-    # 1. Extract Features
+    # 1. Extract Features (NOW ON GPU)
     X, y = load_data_with_ai(dataset_path)
     print(f"\n✅ Data Processed. Shape: {X.shape}")
 
     # 2. Split Data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # 3. Train Optimized Random Forest
-    # Increased trees to 500 and added class_weight='balanced'
+    # 3. Train Optimized Random Forest (STILL CPU - Scikit-learn limit)
     print("🌲 Training Optimized Random Forest (500 Trees)...")
-    rf_model = RandomForestClassifier(n_estimators=500, class_weight='balanced', random_state=42)
+    rf_model = RandomForestClassifier(n_estimators=500, class_weight='balanced', random_state=42, n_jobs=-1) 
+    # Added n_jobs=-1 to use all CPU cores
     rf_model.fit(X_train, y_train)
 
     # 4. Evaluation
@@ -89,7 +104,7 @@ if __name__ == "__main__":
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
 
-    # 5. Visualization (Confusion Matrix)
+    # 5. Visualization
     print("🎨 Plotting Confusion Matrix...")
     unique_classes = sorted(list(set(y)))
     cm = confusion_matrix(y_test, y_pred, labels=unique_classes)

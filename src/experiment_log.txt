@@ -344,3 +344,81 @@ Tomato_Spider_mites_Two_spotted_spider_mite       0.86      0.88      0.87      
 
 ================================================================================
 
+================================================================================
+Timestamp: 2025-12-06 00:28:22
+Configuration: Custom (RESNET18 + RF)
+Dataset Limit: ALL
+Device: NVIDIA GeForce RTX 4060 Laptop GPU
+Overall Accuracy: 87.09%
+--------------------------------------------------------------------------------
+Batch Size: 256
+Timing Breakdown:
+  - Feature Extraction (RESNET18)      : 132.7808s
+  - Data Splitting                     : 0.0245s
+  - Classifier Training (RF)           : 16.2039s
+  - Evaluation                         : 0.1334s
+--------------------------------------------------------------------------------
+Detailed Classification Report:
+                                             precision    recall  f1-score   support
+
+              Pepper__bell___Bacterial_spot       0.94      0.83      0.88       179
+                     Pepper__bell___healthy       0.90      0.98      0.93       271
+                      Potato___Early_blight       0.94      0.97      0.95       216
+                       Potato___Late_blight       0.90      0.87      0.88       213
+                           Potato___healthy       1.00      0.62      0.76        39
+                      Tomato_Bacterial_spot       0.83      0.94      0.88       423
+                        Tomato_Early_blight       0.97      0.34      0.50       200
+                         Tomato_Late_blight       0.81      0.91      0.86       390
+                           Tomato_Leaf_Mold       0.92      0.80      0.85       171
+                  Tomato_Septoria_leaf_spot       0.79      0.87      0.82       322
+Tomato_Spider_mites_Two_spotted_spider_mite       0.79      0.91      0.85       328
+                        Tomato__Target_Spot       0.87      0.71      0.78       326
+      Tomato__Tomato_YellowLeaf__Curl_Virus       0.93      0.97      0.95       645
+                Tomato__Tomato_mosaic_virus       1.00      0.64      0.78        78
+                             Tomato_healthy       0.89      0.98      0.93       327
+
+                                   accuracy                           0.87      4128
+                                  macro avg       0.90      0.82      0.84      4128
+                               weighted avg       0.88      0.87      0.86      4128
+
+================================================================================
+
+================================================================================
+Timestamp: 2025-12-06 00:35:25
+Configuration: Custom (RESNET18 + RF)
+Dataset Limit: ALL
+Device: NVIDIA GeForce RTX 4060 Laptop GPU
+Overall Accuracy: 87.09%
+--------------------------------------------------------------------------------
+Batch Size: 256
+Timing Breakdown:
+  - Feature Extraction (RESNET18)      : 34.4567s
+  - Data Splitting                     : 0.0103s
+  - Classifier Training (RF)           : 14.1938s
+  - Evaluation                         : 0.1213s
+--------------------------------------------------------------------------------
+Detailed Classification Report:
+                                             precision    recall  f1-score   support
+
+              Pepper__bell___Bacterial_spot       0.94      0.83      0.88       179
+                     Pepper__bell___healthy       0.90      0.98      0.93       271
+                      Potato___Early_blight       0.94      0.97      0.95       216
+                       Potato___Late_blight       0.90      0.87      0.88       213
+                           Potato___healthy       1.00      0.62      0.76        39
+                      Tomato_Bacterial_spot       0.83      0.94      0.88       423
+                        Tomato_Early_blight       0.97      0.34      0.50       200
+                         Tomato_Late_blight       0.81      0.91      0.86       390
+                           Tomato_Leaf_Mold       0.92      0.80      0.85       171
+                  Tomato_Septoria_leaf_spot       0.79      0.87      0.82       322
+Tomato_Spider_mites_Two_spotted_spider_mite       0.79      0.91      0.85       328
+                        Tomato__Target_Spot       0.87      0.71      0.78       326
+      Tomato__Tomato_YellowLeaf__Curl_Virus       0.93      0.97      0.95       645
+                Tomato__Tomato_mosaic_virus       1.00      0.64      0.78        78
+                             Tomato_healthy       0.89      0.98      0.93       327
+
+                                   accuracy                           0.87      4128
+                                  macro avg       0.90      0.82      0.84      4128
+                               weighted avg       0.88      0.87      0.86      4128
+
+================================================================================
+

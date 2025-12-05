@@ -110,6 +110,8 @@ In the notebook, you can set `MODEL_TYPE`, `CLASSIFIER_TYPE`, and `DATA_LIMIT` v
 
 ## 📉 Understanding the Confusion Matrix
 
+![Confusion Matrix - ResNet50 + Gradient Boosting (All Dataset)](Confusion%20Matrix%20All%20Dataset%20RES50%20GB.png)
+
 To evaluate how well the model performs, we use a **Confusion Matrix**. This chart visualizes exactly where the model is "confused" between different diseases.
 
 ### How to Read It
@@ -123,3 +125,7 @@ Ideally, we want to see high numbers (dark blue squares) running in a diagonal l
 Numbers **outside** that main diagonal represent errors. By looking at these, we can see *how* the model messed up.
 * **Example:** *Early Blight*, *Late Blight*, and *Bacterial Spot* often look very similar (brown spots), making it harder for the AI to distinguish them compared to distinct viral infections.
 
+### 📄 Resources
+*   [Image Classification Using Machine Learning](https://www.analyticsvidhya.com/blog/2022/01/image-classification-using-machine-learning/) - Analytics Vidhya
+*   [Machine Learning Framework for Image Classification](https://www.researchgate.net/publication/323894638_Machine_Learning_framework_for_image_classification) - ResearchGate
+*   [Image classification + feature extraction with Python and Scikit learn | Computer vision tutorial](https://youtu.be/oEKg_jiV1Ng?si=57L7TRZsOLC22-N_) - YouTube
